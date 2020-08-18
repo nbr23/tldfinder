@@ -3,7 +3,8 @@
 import sys
 from . import json_print_available, csv_print_available, get_available_tlds, get_tld_list
 
-def main(argv):
+def main():
+    argv = sys.argv
     printer = csv_print_available
     second_only = True
     if '--json' in argv:
@@ -30,4 +31,4 @@ def main(argv):
     printer(get_available_tlds(argv[1:], second_only))
 
 if __name__ == '__main__':
-    exit(main(sys.argv))
+    exit(main())
