@@ -13,15 +13,18 @@ def get_prices_string(prices):
     pricelist = {price['label']: price['price']['text'] for price in prices}
     return pricelist
 
-def get_available_tlds(domains, second_only):
+def filter_second_lvl(tld_list):
+    return [tld for tld in tld_list if '.' not in tld]
+
+def filter_max_len(tld_list, max_len):
+    return [tld for tld in tld_list if len(tld) <= max_len]
+
+def get_available_tlds(domains, tld_list):
     cart_id = get_cart_id()
-    all_tlds = get_tld_list()
     for domain in domains:
         domain = domain.split('.', 1)
-        tldlist = [domain[1]] if len(domain) > 1 else all_tlds
-        for tld in tldlist:
-            if second_only and '.' in tld:
-                continue
+        tld_list = [domain[1]] if len(domain) > 1 else tld_list
+        for tld in tld_list:
             results = json.loads(requests.get('https://www.ovh.com/engine/apiv6/order/cart/%s/domain?domain=%s.%s' % (cart_id, domain[0], tld)).text)
             for elt in results:
                 if 'action' in elt and elt['action'] == 'create':
