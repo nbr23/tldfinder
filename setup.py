@@ -10,7 +10,7 @@ setup(name='tldfinder',
       url='https://github.com/nbr23/tldfinder',
       license='MIT',
       packages=['tldfinder'],
-      zip_safe = True,
+      zip_safe=True,
       install_requires=[
           'requests',
           ],
