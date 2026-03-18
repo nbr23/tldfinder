@@ -47,3 +47,12 @@ def csv_format(tlds):
 def csv_print_available(tlds):
     for line in csv_format(tlds):
         print(line)
+
+def csv_write(tlds, filepath):
+    with open(filepath, 'w') as f:
+        for line in csv_format(tlds):
+            f.write(line + '\n')
+
+def json_write(tlds, filepath):
+    with open(filepath, 'w') as f:
+        f.write(json_format(tlds))
