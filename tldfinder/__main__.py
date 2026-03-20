@@ -2,7 +2,7 @@
 
 import sys
 import json
-from . import json_print_available, csv_print_available, csv_write, json_write, get_available_tlds, get_tld_list, filter_second_lvl, filter_max_len
+from . import json_print_available, csv_print_available, json_format, csv_format, get_available_tlds, get_tld_list, filter_second_lvl, filter_max_len
 
 def main():
     argv = sys.argv
@@ -57,13 +57,20 @@ def main():
 
     domains = argv[1:]
     ext = 'json' if use_json else 'csv'
-    writer = json_write if use_json else csv_write
+
+    def write_results(results, filepath):
+        with open(filepath, 'w') as f:
+            if use_json:
+                f.write(json_format(results))
+            else:
+                f.write('\n'.join(csv_format(results)) + '\n')
+        print('saved %s' % filepath)
 
     if output:
-        writer(get_available_tlds(domains, tld_list), output)
+        write_results(list(get_available_tlds(domains, tld_list)), output)
     else:
         for domain in domains:
-            writer(get_available_tlds([domain], tld_list), '%s.%s' % (domain, ext))
+            write_results(list(get_available_tlds([domain], tld_list)), '%s.%s' % (domain, ext))
 
 if __name__ == '__main__':
     exit(main())
