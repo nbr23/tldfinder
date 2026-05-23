@@ -1,4 +1,5 @@
 import hashlib
+import re
 import requests
 import json
 from datetime import datetime, timedelta
@@ -43,6 +44,25 @@ def filter_second_lvl(tld_list):
 
 def filter_max_len(tld_list, max_len):
     return [tld for tld in tld_list if len(tld) <= max_len]
+
+def parse_price(price_text):
+    m = re.search(r'[\d.,]+', price_text or '')
+    if not m:
+        return None
+    return float(m.group(0).replace(',', '.'))
+
+def filter_max_price(tlds, max_renew, new_ratio=2.0):
+    max_new = None if new_ratio is None else max_renew * new_ratio
+    for elt in tlds:
+        renew = parse_price(elt.get('RENEW'))
+        total = parse_price(elt.get('TOTAL'))
+        if renew is None:
+            continue
+        if renew > max_renew:
+            continue
+        if max_new is not None and (total is None or total > max_new):
+            continue
+        yield elt
 
 def get_available_tlds(domains, tld_list):
     cart_id = get_cart_id()
