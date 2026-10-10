@@ -4,6 +4,14 @@
 This tool will list all TLDs available for registration for a specific domain
 name, as well as pricing at ovh.com.
 
+## Install
+
+```
+uv tool install git+https://github.com/nbr23/tldfinder
+```
+
+Or from a checkout: `uv run tldfinder ...`
+
 ## Usage
 
 ```
